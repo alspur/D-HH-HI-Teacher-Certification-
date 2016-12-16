@@ -16,7 +16,7 @@ pct_to_num <- function(string = ""){
   as.numeric(str_replace_all(string, "%", "")) / 100
 }
 
-
+# function to check if cert is active during a given school year
 cert_during_sy <- function(effect_date = mdy("7-1-2000"), 
                            end_date = mdy("6-30-2016"), 
                            life_exp_cde = NA, 
@@ -40,6 +40,8 @@ cert_during_sy <- function(effect_date = mdy("7-1-2000"),
   }
 }
 
+
+# test functions #####
 cert_df <- function(df, school_year){
   
   year_start <- lubridate::mdy(paste("7/1/", school_year -1, sep = ""))

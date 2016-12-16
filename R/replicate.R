@@ -18,6 +18,10 @@ hi_data <- read_csv("data/hi_data.csv")
 # convert colnames to lowercase
 colnames(hi_data) <- col_lower(hi_data)
 
+# get rid of redundant codes
+# convert date columns to date format
+# calculate length of cert (if calculable) 
+# remove certain codes
 hi_clean <- hi_data %>% 
   mutate(cred_cde = str_replace_all(cred_cde, "MHIF", "MHI"),
          cred_cde = str_replace_all(cred_cde, "PHIF", "PHI"),
@@ -39,19 +43,22 @@ hi_clean <- hi_data %>%
   filter(cred_cde != "WCDI") 
 
 # filter out rows w/ NA for start, end, and life_exp
+# filter out rows w/ no life_exp code and exp date before 1994
 hi_slim <- hi_clean %>% 
   select(psn_id, cred_cde, effect_date, exp_date, life_exp_cde) %>%
   filter(!(is.na(effect_date) & is.na(exp_date) & is.na(life_exp_cde))) %>%
   filter(!(is.na(life_exp_cde) & exp_date < mdy("7/1/1994")))
 
+# look at how many rows have NA's for all three data columns
 na_slim <- hi_clean %>% 
   select(psn_id, cred_cde, effect_date, exp_date, life_exp_cde) %>%
   filter((is.na(effect_date) & is.na(exp_date) & is.na(life_exp_cde))) 
 
-
+# look at how many rows don't have a start date
 na_start <- hi_slim %>%
   filter(is.na(effect_date))
 
+# look at how many rows don't have a end date
 na_end <- hi_slim %>% 
   filter(is.na(exp_date))
 
